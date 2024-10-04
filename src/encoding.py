@@ -8,16 +8,16 @@ def basic_encoding(df):
     original column name"""
 
     # Selecting all the columns that have the object data type
-    object_cols = df(include = ['object']).columns
-    
-    encoder = LabelEncoder()
+    object_cols = df.select_dtypes(include = ['object']).columns
     
     # Copying the data, so the old data does not change
-    df = df.copy()
+    proc_df = df.copy()
+
+    # Creating a LabelEncoder object
+    encoder = LabelEncoder()
 
     # for loop iterates over cols with object type, replaces all
     # of them with the new encoded cols
     for col in object_cols:
-        df[col] = encoder.fit_transform(df[col])
-
-    return df    
+        proc_df[col] = encoder.fit_transform(proc_df[col])
+    return proc_df
