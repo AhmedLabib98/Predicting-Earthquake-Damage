@@ -19,3 +19,5 @@ def basic_encoding(df):
     # of them with the new encoded cols
     for col in object_cols:
         df[col] = encoder.fit_transform(df[col])
+
+    return df    
