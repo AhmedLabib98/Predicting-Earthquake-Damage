@@ -1,6 +1,6 @@
 from sklearn.pipeline import Pipeline
 
-def train_model(train_X, train_y, model, cols=None): 
+def train_model(values, label, model): 
 
     """
     Trains a model using training data with the option 
@@ -11,14 +11,13 @@ def train_model(train_X, train_y, model, cols=None):
     model: a model to be trained
     """
 
-    # optional: select columns before training
-    if cols is not None:
-        train_X = train_X.loc[:, cols]
+    # Select the rows that have the `type` equal to 1
+    train_X = values[values["type"] == 1].drop(columns=["type"])
 
     # pipeline - now basic, may add more steps here
     pipe = Pipeline([('model', model)])
 
     # fit pipeline
-    pipe.fit(train_X,train_y)
+    pipe.fit(train_X, label)
 
     return pipe
