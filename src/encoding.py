@@ -20,7 +20,4 @@ def basic_encoding(df):
     # of them with the new encoded cols
     for col in object_cols:
         proc_df[col] = encoder.fit_transform(proc_df[col])
-    
     return proc_df
-
-
