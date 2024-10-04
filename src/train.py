@@ -20,3 +20,5 @@ def train_model(train_X, train_y, model, cols=None):
 
     # fit pipeline
     pipe.fit(train_X,train_y)
+
+    return pipe
