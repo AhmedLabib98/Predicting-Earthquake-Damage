@@ -1,4 +1,6 @@
-submis_format = pd.read_csv(DATA_DIR / 'submission_format.csv', index_col = 'building_id')
+import numpy as np
+import pandas as pd
 
-my_submission = pd.DataFrame(data = 
-                             )
+def submit(df, file_name):
+    """ save pd df as csv file"""
+    pd.DataFrame.to_csv(df, file_name, index = False)

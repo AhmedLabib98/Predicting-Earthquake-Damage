@@ -1,14 +1,8 @@
-def predict(model, X_data):
+def predict(model, X_values):
     """
-    This function takes the input as the model, and the X data.
-    It prints out the predicted values for the target variable.
-    In this case, the target variable is 
+    Applies model to X_values to get predictions
     """
-    test_values = X_data[X_data["type"] == 0].drop(columns=["type"])
-    train_values = X_data[X_data["type"] == 1].drop(columns=["type"])
 
-    y_pred_train = model.predict(train_values)
-    y_pred_test = model.predict(test_values)
+    y_pred = model.predict(X_values)
 
-    return y_pred_train, y_pred_test
- 
+    return y_pred

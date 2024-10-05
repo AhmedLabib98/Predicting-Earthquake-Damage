@@ -1,11 +1,13 @@
 from sklearn.metrics import f1_score
 
-def f1(train_labels, predictions):
+def f1(df, target_col, predictions):
+    """ Returns the micro-f1 score"""
 
-    number = f1_score(
-        train_labels["damage_grade"],
+    score = f1_score(
+        df[target_col],
         predictions,
         average = 'micro'
     )
-    return number
+    
+    return score
 
