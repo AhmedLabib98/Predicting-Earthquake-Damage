@@ -20,7 +20,14 @@ def basic_encoding(df):
     proc_df = df.copy()
 
     # Creating a LabelEncoder object
-    encoder = LabelEncoder()
+    encoder = LabelEncoder() 
+    
+    # TODO: different encoding for some location cols
+    # geo_level_1_id, geo_level_2_id, geo_level_3_id 
+    # numbers indicate locations
+    # BUT: no pattern for these location cols
+    # encode them as strings to express the relationship
+    # target encoding maybe?
 
     # for loop iterates over cols with object type, replaces all
     # of them with the new encoded cols
