@@ -1,4 +1,5 @@
 from sklearn.pipeline import Pipeline
+from sklearn.model_selection import train_test_split
 
 def train_model(train_X, train_y, model): 
 
@@ -14,6 +15,9 @@ def train_model(train_X, train_y, model):
     # pipeline - now basic, may add more steps here
     pipe = Pipeline([('model', model)])
 
+    # test-train split 
+    X_train, X_test, y_train, y_test = train_test_split(train_x, train_y, test_size = 0.2, random_state = 1)
+    
     # fit pipeline
     pipe.fit(train_X, train_y)
 
