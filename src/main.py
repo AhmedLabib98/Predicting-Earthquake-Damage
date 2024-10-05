@@ -6,7 +6,6 @@ from xgboost import XGBClassifier
 from data_loading import data_loading
 from encoding import basic_encoding
 from selection import select_features
-from splitting import make_split
 from train import train_model
 from predict import predict
 from f1_score import f1
