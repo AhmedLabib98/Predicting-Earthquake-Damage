@@ -1,10 +1,12 @@
 # Import packages
-from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier 
 
 from data_loading import data_loading
 from encoding import basic_encoding
 from selection import select_features
+from splitting import make_split
 from train import train_model
 from predict import predict
 from f1_score import f1
@@ -31,10 +33,18 @@ selected_test_values = select_features(
     columns_to_drop=['building_id']
 )
 
+selected_test_values = select_features(
+    df=train_label,
+    columns_to_drop=['building_id']
+)
+
+# Split data into train and test sets
+X_train, X_valid, y_train, y_valid = make_split(selected_train_values, selected_test_values)
+
 # Train a model
 my_model = train_model(
-    train_X=selected_train_values,
-    train_y=train_label, 
+    train_data=X_train,
+    label_data=y_train, 
     model=RandomForestClassifier(), 
 )
 
