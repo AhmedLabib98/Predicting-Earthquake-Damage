@@ -31,3 +31,4 @@ def basic_encoding(df):
     T_encoder = TargetEncoder()
     proc_df[['geo_level_1_id', 'geo_level_2_id', 'geo_level_3_id']] = T_encoder.fit_transform(geo_level_cols)
     return proc_df
+#f
