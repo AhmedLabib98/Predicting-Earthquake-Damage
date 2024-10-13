@@ -1,5 +1,6 @@
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
+from cv_metric import cv_metric
 
 def train_model(train_data, label_data, model): 
 
