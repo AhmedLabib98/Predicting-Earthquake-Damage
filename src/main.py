@@ -1,6 +1,7 @@
 # Import packages
-from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
+from sklearn.ensemble import RandomForestClassifier
+from xgboost import XGBClassifier 
 
 from data_loading import data_loading
 from encoding import basic_encoding
@@ -26,32 +27,35 @@ selected_train_values = select_features(
     columns_to_drop=['building_id'] 
     )
 
+selected_train_label = select_features(
+    df=train_label,
+    columns_to_drop=['building_id']
+)
+
 selected_test_values = select_features(
     df=encod_test_values,
     columns_to_drop=['building_id']
 )
 
-# Train a model
-my_model = train_model(
-    train_X=selected_train_values,
-    train_y=train_label, 
+# Train a model in full dataset
+full_model = train_model(
+    train_data=selected_train_values,
+    label_data=selected_train_label, 
     model=RandomForestClassifier(), 
 )
 
 # Make predictions
-y_pred_train = predict(my_model, selected_train_values)
-y_pred_test = predict(my_model, selected_test_values)
+y_pred_train = predict(model = full_model, X_values = selected_train_values)
+y_pred_test = predict(model = full_model, X_values = selected_test_values)
 
-# Evaluate the train model
-f1(df=train_label, target_col= "damage_grade", predictions=y_pred_train)
+# Evaluate the model on the training
+f1(df=train_label, target_col="damage_grade", predictions=y_pred_train)
 
 # Convert to pd
 y_pred_test_pd = convert_to_pd(y_pred_test)
 
 # Concat building_id and label cols into one df
-final_df = concat_pd(df_id=test_values, df_label=y_pred_test_pd)
+final_pd = concat_pd(df_id=test_values, df_label=y_pred_test_pd)
 
 # Submit
-submit(df=final_df, file_name='second_sub.csv')
-
-
+submit(df=final_pd, file_name='data/04_submissions/second_sub.csv')

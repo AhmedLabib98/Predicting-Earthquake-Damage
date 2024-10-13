@@ -19,16 +19,16 @@ def basic_encoding(df):
     # of them with the new encoded cols
     for col in object_cols:
         proc_df[col] = encoder.fit_transform(proc_df[col])
-    # Converting the geo cols to str data type
-    proc_df['geo_level_1_id'] = proc_df['geo_level_1_id'].astype(str)
-    proc_df['geo_level_2_id'] = proc_df['geo_level_2_id'].astype(str)
-    proc_df['geo_level_3_id'] = proc_df['geo_level_3_id'].astype(str)
-    # Target Encoding the cols:
-    geo_level_cols = proc_df['geo_level_1_id',
-                        'geo_level_2_id',
-                        'geo_level_3_id'
-                        ]
-    T_encoder = TargetEncoder()
-    proc_df[['geo_level_1_id', 'geo_level_2_id', 'geo_level_3_id']] = T_encoder.fit_transform(geo_level_cols)
+    # # Converting the geo cols to str data type
+    # proc_df['geo_level_1_id'] = proc_df['geo_level_1_id'].astype(str)
+    # proc_df['geo_level_2_id'] = proc_df['geo_level_2_id'].astype(str)
+    # proc_df['geo_level_3_id'] = proc_df['geo_level_3_id'].astype(str)
+    # # Target Encoding the cols:
+    # geo_level_cols = proc_df['geo_level_1_id',
+    #                     'geo_level_2_id',
+    #                     'geo_level_3_id'
+    #                     ]
+    # T_encoder = TargetEncoder()
+    # proc_df[['geo_level_1_id', 'geo_level_2_id', 'geo_level_3_id']] = T_encoder.fit_transform(geo_level_cols)
     
     return proc_df
