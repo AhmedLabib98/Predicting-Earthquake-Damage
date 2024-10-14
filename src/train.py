@@ -1,6 +1,6 @@
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import f1_score, make_scorer
+from cv_metric import cv_metric
 
 def train_model(train_data, label_data, model): 
 
@@ -29,8 +29,7 @@ def train_model(train_data, label_data, model):
     } 
 
     # define scoring function
-    scoring = make_scorer(f1_score, 
-                        average='micro')
+    scoring = cv_metric()
     
     # grid search cross-validation 5-folds
     search = GridSearchCV(pipe, 

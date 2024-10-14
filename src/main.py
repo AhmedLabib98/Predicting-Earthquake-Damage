@@ -2,7 +2,7 @@
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier 
-
+from splitting import make_split 
 from data_loading import data_loading
 from encoding import basic_encoding
 from selection import select_features
