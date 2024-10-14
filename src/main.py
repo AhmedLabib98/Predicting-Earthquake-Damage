@@ -4,7 +4,7 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier 
 from splitting import make_split 
 from data_loading import data_loading
-from encoding import basic_encoding
+from label_encoding import label_encoding
 from selection import select_features
 from train import train_model
 from predict import predict
@@ -18,8 +18,8 @@ from submission import submit
 train_values, train_label, test_values = data_loading()
 
 # Encoding
-encod_train_values = basic_encoding(train_values)
-encod_test_values = basic_encoding(test_values)
+encod_train_values = label_encoding(train_values)
+encod_test_values = label_encoding(test_values)
 
 # Select features
 selected_train_values = select_features(
