@@ -24,6 +24,7 @@ target_enc_train_X, target_enc_test_X = target_encoding(train_X, test_X, train_y
 en_train_X = label_encoding(train_X)
 en_test_X = label_encoding(test_X)
 
+# TODO: create a new DF that contains the encoded cols
 
 # Split train into cv_train and cv_validation
 # we split the training set into a 80% (cv_train_X) and 20% (cv_valid_X)
