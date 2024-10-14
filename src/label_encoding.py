@@ -1,6 +1,6 @@
 from sklearn.preprocessing import LabelEncoder
 
-def basic_encoding(df):
+def label_encoding(df):
     """
     a for loop iterates over all the columns with object
     data type, and then creates a new column into the copied

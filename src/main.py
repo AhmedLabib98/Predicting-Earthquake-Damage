@@ -1,66 +1,66 @@
 # Import packages
 import pandas as pd
-from sklearn.ensemble import RandomForestClassifier
-from xgboost import XGBClassifier 
 from splitting import make_split 
 from data_loading import data_loading
-from encoding import basic_encoding
-from target_encoding import target_encoding_train, target_encoding_test
-from selection import select_features
+from label_encoding import label_encoding
+# from selection import select_features
 from train import train_model
+from pipeline import pipe
 from predict import predict
 from f1_score import f1
 from convert_to_pd import convert_to_pd
 from concate import concat_pd
 from submission import submit
 
-
 # Load the data
-train_values, train_label, test_values = data_loading()
+train_X, train_y, test_X = data_loading()
 
-# Label encoding
-encod_train_values = basic_encoding(train_values)
-encod_test_values = basic_encoding(test_values)
+# Label encoding for all string columns in train_X and test_X
+en_train_X = label_encoding(train_X)
+en_test_X = label_encoding(test_X)
 
-# Target encoding
-t_encoded_train_values, t_encoder  = target_encoding_train( df = train_values, y = train_label)
-t_encoded_test_values = target_encoding_test( df = test_values, T_encoder = t_encoder)
+# Split train into cv_train and cv_validation
+# we split the training set into a 80% (cv_train_X) and 20% (cv_valid_X)
+cv_train_X, cv_valid_X, cv_train_y, cv_valid_y = make_split(train_data=en_train_X,
+                                                            label_data=train_y)
 
-# Select features
-selected_train_values = select_features(
-    df=encod_train_values,
-    columns_to_drop=['building_id'] 
-    )
+# Train a model using the cv_train_X (which is 80% of the original training set: train_X)
+split_model = train_model(
+    train_data=cv_train_X,
+    label_data=cv_train_y)
 
-selected_train_label = select_features(
-    df=train_label,
-    columns_to_drop=['building_id']
-)
+# Get predictions for target columns for each of the two splits
+# to compare them with the observed label columns and generate the f1-score below
+y_pred_cv_train = predict(model = split_model, X_values = cv_train_X)
+y_pred_cv_valid = predict(model = split_model, X_values = cv_valid_X) 
 
-selected_test_values = select_features(
-    df=encod_test_values,
-    columns_to_drop=['building_id']
-)
+# Get f1 score comparing observed vs predicted target column for each split
+# if the f1-scores are close to each other, then no overfitting
+f1_cv_train = f1(df=cv_train_y, target_col="damage_grade", predictions=y_pred_cv_train)
+f1_cv_valid = f1(df=cv_valid_y, target_col="damage_grade", predictions=y_pred_cv_valid)
 
-# Train a model in full dataset
-full_model = train_model(
-    train_data=selected_train_values,
-    label_data=selected_train_label, 
-    model=RandomForestClassifier(), 
-)
+print(f1_cv_train)
+print(f1_cv_valid)
 
-# Make predictions
-y_pred_train = predict(model = full_model, X_values = selected_train_values)
-y_pred_test = predict(model = full_model, X_values = selected_test_values)
 
-# Evaluate the model on the training
-f1(df=train_label, target_col="damage_grade", predictions=y_pred_train)
+# Now fit the previous model in the full 100% training set
+full_model = pipe.fit(X=en_train_X, y=train_y)
+
+# Get predicted label column for full dataset
+y_pred_train = predict(model = full_model, X_values = en_train_X)
+y_pred_test = predict(model = full_model, X_values = en_test_X)
+
+# Get f1 score comparing observed y label and predicted label for full dataset
+f1_train = f1(df=train_y, target_col="damage_grade", predictions=y_pred_train)
+
+print(f1_train)
+
 
 # Convert to pd
 y_pred_test_pd = convert_to_pd(y_pred_test)
 
-# Concat building_id and label cols into one df
-final_pd = concat_pd(df_id=test_values, df_label=y_pred_test_pd)
+# Concat rownames of df_id with the pd dataset y_pred_test_pd
+final_pd = concat_pd(df_id=en_test_X, df_label=y_pred_test_pd)
 
 # Submit
 submit(df=final_pd, file_name='data/04_submissions/second_sub.csv')
