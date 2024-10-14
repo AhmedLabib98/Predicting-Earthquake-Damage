@@ -11,13 +11,18 @@ from f1_score import f1
 from convert_to_pd import convert_to_pd
 from concate import concat_pd
 from submission import submit
+from potential_t_enc import target_encoding
 
 # Load the data
 train_X, train_y, test_X = data_loading()
 
+# Target encoding 
+target_encoding(train_X, test_X, train_y)
+
 # Label encoding for all string columns in train_X and test_X
 en_train_X = label_encoding(train_X)
 en_test_X = label_encoding(test_X)
+
 
 # Split train into cv_train and cv_validation
 # we split the training set into a 80% (cv_train_X) and 20% (cv_valid_X)
