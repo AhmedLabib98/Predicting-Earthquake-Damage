@@ -1,9 +1,9 @@
-from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
-from cv_metric import cv_metric
+from pipeline import pipe
 from cv_params import cv_params
+from cv_metric import cv_metric
 
-def train_model(train_data, label_data, model): 
+def train_model(train_data, label_data): 
 
     """
     Trains a model 
@@ -15,23 +15,16 @@ def train_model(train_data, label_data, model):
 
     train_data: dataframe of training data
     label_data: dataframe of training data
-    model: a model to be trained
     """
-
-    # pipeline - now basic, may add more steps here
-    pipe = Pipeline([('model', model)])
-
-    # define scoring function
-    scoring = cv_metric
     
     # grid search cross-validation 5-folds
-    search = GridSearchCV(pipe, 
-                        param_grid = cv_params,
-                        scoring = scoring,
-                        cv = 5,
-                        refit = True,
-                        verbose = 3,
-                        n_jobs=-1) 
+    search = GridSearchCV(estimator=pipe, 
+                        param_grid=cv_params, # hyperparameter list
+                        scoring=cv_metric,
+                        cv=5,
+                        refit=True,
+                        verbose=3, # level of information on progress
+                        n_jobs=-1) # use all cores for computation
 
     # fit the model
     search.fit(train_data, label_data.values.ravel())
