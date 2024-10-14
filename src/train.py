@@ -41,6 +41,6 @@ def train_model(train_data, label_data, model):
                         n_jobs=-1) 
 
     # fit the model
-    search.fit(train_data, label_data)
+    search.fit(train_data, label_data.values.ravel())
 
     return search
