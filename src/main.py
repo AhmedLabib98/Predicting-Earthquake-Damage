@@ -4,7 +4,8 @@ from splitting import make_split
 from data_loading import data_loading
 from label_encoding import label_encoding
 # from selection import select_features
-from pipeline import train_pipe
+from train import train_model
+from pipeline import pipe
 from predict import predict
 from f1_score import f1
 from convert_to_pd import convert_to_pd
@@ -16,9 +17,10 @@ from potential_t_enc import target_encoding
 train_X, train_y, test_X = data_loading()
 
 # Target encoding 
-target_encoding(train_X, test_X, train_y)
+target_enc_train_X, target_enc_test_X = target_encoding(train_X, test_X, train_y)
 
 # Label encoding for all string columns in train_X and test_X
+# Excluding geo_level_1_id, geo_level_2_id, geo_level_3_id
 en_train_X = label_encoding(train_X)
 en_test_X = label_encoding(test_X)
 
