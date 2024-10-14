@@ -4,8 +4,7 @@ from splitting import make_split
 from data_loading import data_loading
 from label_encoding import label_encoding
 # from selection import select_features
-from train import train_model
-from pipeline import pipe
+from pipeline import train_pipe
 from predict import predict
 from f1_score import f1
 from convert_to_pd import convert_to_pd
@@ -25,9 +24,8 @@ cv_train_X, cv_valid_X, cv_train_y, cv_valid_y = make_split(train_data=en_train_
                                                             label_data=train_y)
 
 # Train a model using the cv_train_X (which is 80% of the original training set: train_X)
-split_model = train_model(
-    train_data=cv_train_X,
-    label_data=cv_train_y)
+cv_pipe = train_pipe()
+split_model = cv_pipe.fit(cv_train_X,cv_train_y.values.ravel())
 
 # Get predictions for target columns for each of the two splits
 # to compare them with the observed label columns and generate the f1-score below
@@ -43,8 +41,9 @@ print(f1_cv_train)
 print(f1_cv_valid)
 
 
-# Now fit the previous model in the full 100% training set
-full_model = pipe.fit(X=en_train_X, y=train_y)
+# Now get the previous model (it was the best one during cv)
+# and fit it using the full 100% training set
+full_model = cv_pipe.best_estimator_.fit(X=en_train_X, y=train_y)
 
 # Get predicted label column for full dataset
 y_pred_train = predict(model = full_model, X_values = en_train_X)
