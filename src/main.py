@@ -5,6 +5,7 @@ from xgboost import XGBClassifier
 from splitting import make_split 
 from data_loading import data_loading
 from encoding import basic_encoding
+from target_encoding import target_encoding_train, target_encoding_test
 from selection import select_features
 from train import train_model
 from predict import predict
@@ -17,9 +18,13 @@ from submission import submit
 # Load the data
 train_values, train_label, test_values = data_loading()
 
-# Encoding
+# Label encoding
 encod_train_values = basic_encoding(train_values)
 encod_test_values = basic_encoding(test_values)
+
+# Target encoding
+t_encoded_train_values, t_encoder  = target_encoding_train( df = train_values, y = train_label)
+t_encoded_test_values = target_encoding_test( df = test_values, T_encoder = t_encoder)
 
 # Select features
 selected_train_values = select_features(
