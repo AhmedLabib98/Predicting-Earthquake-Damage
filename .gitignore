@@ -163,3 +163,6 @@ cython_debug/
 
 # Ignore the scratch book
 scratch_book.py
+
+# Ignore the old target encoding function
+target_encoding.py
