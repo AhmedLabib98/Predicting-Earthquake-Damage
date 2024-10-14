@@ -29,7 +29,7 @@ def train_model(train_data, label_data, model):
     } 
 
     # define scoring function
-    scoring = cv_metric()
+    scoring = cv_metric
     
     # grid search cross-validation 5-folds
     search = GridSearchCV(pipe, 

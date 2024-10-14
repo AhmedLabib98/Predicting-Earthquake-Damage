@@ -7,9 +7,15 @@ def basic_encoding(df):
     data frame, with the suffix "_encoded" appended to the
     original column name.
     """
-    # Selecting all the columns that have the object data type
-    object_cols = df.select_dtypes(include = ['object']).columns
 
+    # List of columns to exclude from label-encoding
+    exclude_cols = ['geo_level_1_id', 'geo_level_2_id', 'geo_level_3_id']
+
+    # Selecting all the columns that have the object data type and
+    # excluding target encoding columns 
+    object_cols = df.select_dtypes(include = ['object']).columns
+    object_cols = [col for col in object_cols if col not in exclude_cols]
+    
     # Copying the data, so the old data does not change
     proc_df = df.copy()
 
@@ -20,5 +26,4 @@ def basic_encoding(df):
     # of them with the new encoded cols
     for col in object_cols:
         proc_df[col] = encoder.fit_transform(proc_df[col])
-    
     return proc_df
