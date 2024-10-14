@@ -1,6 +1,7 @@
 from sklearn.pipeline import Pipeline
 from sklearn.model_selection import GridSearchCV
 from cv_metric import cv_metric
+from cv_params import cv_params
 
 def train_model(train_data, label_data, model): 
 
@@ -20,20 +21,12 @@ def train_model(train_data, label_data, model):
     # pipeline - now basic, may add more steps here
     pipe = Pipeline([('model', model)])
 
-    # define potential parameter values - uncomment several for best results
-    param_grid = { 
-        # 'model__n_estimators': [25, 50, 100, 150], 
-        # 'model__max_features': ['sqrt', 'log2', None], 
-        'model__max_depth': [3, 6, 9], 
-        # 'model__max_leaf_nodes': [3, 6, 9], 
-    } 
-
     # define scoring function
     scoring = cv_metric
     
     # grid search cross-validation 5-folds
     search = GridSearchCV(pipe, 
-                        param_grid,
+                        param_grid = cv_params,
                         scoring = scoring,
                         cv = 5,
                         refit = True,
